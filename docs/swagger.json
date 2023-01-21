@@ -1,0 +1,13 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "ShopAPI",
+        "description": "This documentation contains all the APIs associated with the ShopAPI API. Routes with the authorize icon need to be activated with either a user or admin token.",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://ShopAPI.herokuapp.com"
+        }
+    ]
+}

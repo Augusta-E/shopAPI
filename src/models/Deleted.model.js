@@ -40,11 +40,6 @@ const DeletedUserSchema = new mongoose.Schema(
         deactivated: {
             type: Boolean,
             default: false
-        },
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            require: true
         }
     },
 

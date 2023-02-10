@@ -5,7 +5,7 @@ exports.updateUser = async (req, res, next) => {
     try {
         const user = await userServices.updateUser(req.params.id, { ...req.body });
 
-        return response.success(res, 201, 'updated successful', user);
+        return response.success(res, 201, 'updated successful');
     } catch (error) {
         return next(error);
     }
@@ -35,6 +35,16 @@ exports.deactivateUser = async (req, res, next) => {
         const user = await userServices.deactivateUser(req.params.id);
 
         return response.success(res, 201, 'deactivation successful', user);
+    } catch (error) {
+        return next(error);
+    }
+};
+
+exports.reactivateUser = async (req, res, next) => {
+    try {
+        const user = await userServices.reactivateUser(req.params.id);
+
+        return response.success(res, 201, 'reactivation successful', user);
     } catch (error) {
         return next(error);
     }

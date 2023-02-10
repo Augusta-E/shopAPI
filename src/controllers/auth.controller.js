@@ -4,7 +4,7 @@ const response = require('../utils/responseHandler');
 exports.signUp = async (req, res, next) => {
     try {
         const user = await authService.createUser({ ...req.body });
-        return response.success(res, 201, 'Sign up successful, please activate your account', user);
+        return response.success(res, 201, 'Sign up successful, please activate your account to login', user);
     } catch (error) {
         return next(error);
     }

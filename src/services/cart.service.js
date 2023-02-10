@@ -1,53 +1,76 @@
 const Cart = require('../models/Cart.model');
 const ObjectId = require('mongoose').Types.ObjectId;
-
+const User = require('../models/User.model');
+const Order = require('../models/Order.model');
+const { validateCartSchema } = require('../validations/cart.validation');
 const { CustomError } = require('../utils/customErrors');
 
-const createCart = async (id, payload) => {
-    const { item } = await validateCreateProductSchema(payload);
-    const cartExists = await Cart.findOne({ title });
-    if (cartExists) throw new CustomError('Cart title already exists');
-    const newCart = await Cart.create({});
-    return newCart;
+const createCart = async (payload) => {
+    const { products, user } = await validateCartSchema(payload);
+    const userExists = await User.findOne({ _id: user });
+    if (!userExists)
+        throw new CustomError(`User with the Id ${user} does not exists`, 400);
+    const cart = await Cart.findOne({ user });
+    if (cart) throw new CustomError('Cart already exists');
+
+    //create user cart
+    const newCart = await Cart.create({
+        user,
+        products
+    });
+    const cartId = newCart._id;
+
+    //get every products in user's cart
+    const userCart = await Cart.findOne({ user }).populate('products.productId');
+    const cartItems = userCart.products;
+
+    //calculate each product in user's cart and get the array
+    const prices = cartItems.map(({ productId, quantity }) => {
+        const price = productId.price;
+        const total = price * quantity;
+        return total;
+    });
+    //sum-up total price of all cart items
+    const totalPrice = prices.reduce((a, b) => a + b, 0);
+
+    //create corresponding order
+    Order.create({ user, products: cartId, totalAmount: totalPrice });
+
+    //return created cart
+    return { newCart };
 };
 
-const updateCart = async (id, payload) => {
-    const cart = await Cart.findById(productId);
-    if (!cart || ObjectId.isValid(productId) == false) throw CustomError('no cart with the Id');
-    const updatedProduct = await Product.findByIdAndUpdate(
-        id,
-        {
-            title,
-            desc,
-            img,
-            category,
-            quantity,
-            price
-        },
-        { new: true }
-    );
-    return updatedProduct;
+//delete cart with cart Id
+const deleteCart = async (cartId) => {
+    const cart = await Cart.findById(cartId);
+    if (!cart || ObjectId.isValid(cart) == false) throw CustomError('no product with the Id');
+    await Cart.deleteOne({ _id: cartId });
+
+    //delete corresponding order
+    await Order.deleteOne({ products: cartId });
+
+    return `cart successfully deleted`;
 };
 
-const deleteCart = async (productId) => {
-    const productById = await Product.findById(productId);
-    if (!productById || ObjectId.isValid(productId) == false)
-        throw CustomError('no product with the Id');
-    const product = await Product.findByIdAndDelete(productId);
+//get user cart
+const getCart = async (userId) => {
+    const user = await Cart.findOne({ user: userId });
+    if (!user || ObjectId.isValid(user) == false) throw new CustomError('no cart with the user Id');
 
-    return `product '${product.title}' deleted`;
+    const cartItems = await user.populate('products.productId');
+
+    const cart = cartItems.products;
+
+    const cartData = cart.map(({ productId, quantity }) => {
+        const productDetails = {
+            productName: productId.title,
+            pricePerProduct: productId.price,
+            quantityOrdered: quantity,
+            image: productId.img
+        };
+        return productDetails;
+    });
+    return cartData;
 };
 
-const getCart = async (productId) => {
-    const product = await Cart.findOne({ userId });
-    if (!product || ObjectId.isValid(productId) == false)
-        throw CustomError('no product with the Id');
-
-    return product;
-};
-
-const getAllCarts = async () => {
-    const Cart = await Cart.find();
-};
-
-module.exports = { createCart, updateCart, deleteCart, getCart, getAllCarts };
+module.exports = { createCart, deleteCart, getCart };

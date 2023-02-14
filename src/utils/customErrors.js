@@ -4,7 +4,6 @@ class CustomError extends Error {
         this.statusCode = statusCode || 400;
         this.name = name;
     }
-
     toJSON() {
         return {
             code: this.statusCode,
@@ -14,5 +13,4 @@ class CustomError extends Error {
         };
     }
 }
-
 module.exports = { CustomError };

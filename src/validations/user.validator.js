@@ -59,7 +59,6 @@ const loginUserSchema = Joi.object({
         .min(5)
         .max(20)
         .pattern(/^[0-9]+$/)
-        .required()
         .messages({
             'string.base': 'PhoneNumber must be a string',
             'any.required': 'PhoneNumber is required',
@@ -68,7 +67,7 @@ const loginUserSchema = Joi.object({
             'string.max': 'PhoneNumber must have a maximum length of 20',
             'string.pattern': 'PhoneNumber must contain only numbers'
         }),
-    email: Joi.string().email().required().trim().messages({
+    email: Joi.string().email().trim().messages({
         'string.base': 'Email must be a string',
         'any.required': 'Email is required',
         'string.empty': 'Email cannot be empty',

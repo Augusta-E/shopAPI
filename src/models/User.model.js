@@ -31,15 +31,23 @@ const UserSchema = new mongoose.Schema(
         },
         isVerified: {
             type: Boolean,
-            default: false
+            default: false,
+            required: true
         },
         isAdmin: {
             type: Boolean,
-            default: false
+            default: false,
+            required: true
         },
-        deactivated: {
+        isDeactivated: {
             type: Boolean,
-            default: false
+            default: false,
+            required: true
+        },
+        isDeleted: {
+            type: Boolean,
+            default: false,
+            required: true
         }
     },
 

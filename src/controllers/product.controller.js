@@ -13,7 +13,7 @@ exports.createProduct = async (req, res, next) => {
 
 exports.updateProduct = async (req, res, next) => {
     try {
-        const user = await productService.updateUser(req.params.id, { ...req.body });
+        const user = await productService.updateProduct(req.params.id, { ...req.body });
 
         return response.success(res, 201, 'updated successful', user);
     } catch (error) {
@@ -33,7 +33,7 @@ exports.getProducts = async (req, res, next) => {
 
 exports.getProductById = async (req, res, next) => {
     try {
-        const product = await productService.getProductById(req.params.id);
+        const product = await productService.getProduct(req.params.id);
 
         return response.success(res, 201, 'product successfully retrieved', product);
     } catch (error) {

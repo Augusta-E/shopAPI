@@ -25,15 +25,15 @@ const createProductSchema = Joi.object({
         'string.empty': 'Product Category cannot be empty'
     }),
 
-    quantity: Joi.string().required().trim().messages({
-        'string.base': 'Quantity must be a strings',
+    quantity: Joi.number().required().messages({
+        'number.base': 'Quantity must be a strings',
         'any.required': 'Quantity is required',
-        'string.empty': 'Quantity cannot be empty'
+        'number.empty': 'Quantity cannot be empty'
     }),
     price: Joi.number().required().messages({
-        'string.base': 'Price must be a number',
+        'number.base': 'Price must be a number',
         'any.required': 'Price is required',
-        'string.empty': 'Price cannot be empty'
+        'number.empty': 'Price cannot be empty'
     })
 }).messages({
     'object.unknown': 'You have used an invalid key.'

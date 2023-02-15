@@ -9,7 +9,9 @@ function emailVerificationToken(payload) {
 }
 
 function generateToken(userDetails) {
-    return jwt.sign(userDetails, config.app.jwt_secret, {});
+    return jwt.sign(userDetails, config.app.jwt_secret, {
+        expiresIn: `${config.app.jwt_expires_in}`
+    });
 }
 
 function verifyToken(token) {

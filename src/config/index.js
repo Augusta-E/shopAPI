@@ -11,7 +11,7 @@ const config = Object.freeze({
     },
 
     db: {
-        name: process.env.DB_NAME,
+        name: process.env.DB_NAME || 'shopBackendAPI',
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD
     }

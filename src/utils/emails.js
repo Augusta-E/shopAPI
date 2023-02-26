@@ -4,7 +4,7 @@ require('dotenv').config();
 const { emailVerificationToken } = require('./token');
 const User = require('../models/User.model');
 
-let hostURL = 'https://shopAPI.com';
+let hostURL = 'https://shopapi-bdjh.onrender.com';
 if (process.env.NODE_ENV === 'development') {
     hostURL = `http://localhost:${process.env.PORT || 3000}`;
 }
